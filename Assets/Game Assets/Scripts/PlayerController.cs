@@ -2,7 +2,7 @@
 
 public class PlayerController : MonoBehaviour
 {
-    public float playerSpeed;
+    public float playerSpeed, playerJumpForce;
 
     [SerializeField]
     private BoxCollider2D StandingCol, CrouchCol;
@@ -14,13 +14,8 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-        plRb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-
+        playerAnim = GetComponent<Animator>();
+        plRb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -80,9 +75,13 @@ public class PlayerController : MonoBehaviour
         playerAnim.SetBool("isCrouching", IsCrouching);
 
     }
+
     private void Jump()
     {
-        float jumpForce = Input.GetAxis("Vertical");
-        playerAnim.SetFloat("jump", jumpForce);
+        float jump = Input.GetAxis("Vertical");
+        playerAnim.SetFloat("jump", jump);
+        plRb.velocity = new Vector2(plRb.velocity.x, jump * playerJumpForce);
+       // plRb.AddForce(Vector2.up*playerJumpForce);
+
     }
 }
