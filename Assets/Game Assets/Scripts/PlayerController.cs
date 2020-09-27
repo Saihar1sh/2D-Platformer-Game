@@ -75,13 +75,13 @@ public class PlayerController : MonoBehaviour
         playerAnim.SetBool("isCrouching", IsCrouching);
 
     }
-
     private void Jump()
     {
         float jump = Input.GetAxis("Vertical");
         playerAnim.SetFloat("jump", jump);
-        plRb.velocity = new Vector2(plRb.velocity.x, jump * playerJumpForce);
-       // plRb.AddForce(Vector2.up*playerJumpForce);
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            plRb.velocity = new Vector2(plRb.velocity.x, playerJumpForce);
 
     }
+
 }
