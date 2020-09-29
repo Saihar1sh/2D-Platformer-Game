@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 930682683}
   - component: {fileID: 930682682}
   - component: {fileID: 930682679}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: 2012074695}
   - component: {fileID: 2012074694}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: LvlCompleteTrigger
   m_TagString: LvlComplete
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -729,11 +729,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1717455084853504284, guid: 21b8af3d16e917d4299e89d928200a91,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 5645440315676954403, guid: 21b8af3d16e917d4299e89d928200a91,
         type: 3}
       propertyPath: m_Name
