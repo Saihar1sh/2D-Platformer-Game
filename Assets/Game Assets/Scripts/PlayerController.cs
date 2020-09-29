@@ -124,4 +124,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player Died........Scene restarting");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
 }
