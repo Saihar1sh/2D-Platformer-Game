@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     public float playerSpeed, playerJumpForce;
 
     [SerializeField]
-    private BoxCollider2D StandingCol, CrouchCol, LvlCompleteCol;
+    private BoxCollider2D StandingCol, CrouchCol;
 
-    private float horizontal;
+    private float speed;
     private bool IsCrouching = false, canMove = true;
     private Animator playerAnim;
     private Rigidbody2D plRb;
@@ -22,7 +21,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         PlayerMvt();
         PlayerDirection();
         Crouch();
@@ -31,22 +29,20 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMvt()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
         if (canMove)
         {
-            playerAnim.SetFloat("Speed", Mathf.Abs(horizontal));
-            Vector3 position = transform.position;
-            position.x +=  horizontal * playerSpeed * Time.deltaTime;
-            transform.position = position;
+            speed = Input.GetAxisRaw("Horizontal");
+            playerAnim.SetFloat("Speed", Mathf.Abs(speed));
+            plRb.velocity = new Vector2(speed * playerSpeed, plRb.velocity.y);
         }
     }
 
     private void PlayerDirection()
     {
         Vector3 scale = transform.localScale;
-        if (horizontal < 0)
+        if (speed < 0)
             scale.x = -1f * Mathf.Abs(scale.x);
-        else if (horizontal > 0)
+        else if (speed > 0)
             scale.x = Mathf.Abs(scale.x);
         transform.localScale = scale;
     }
@@ -81,20 +77,11 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        float jump = Input.GetAxisRaw("Jump");
+        float jump = Input.GetAxis("Vertical");
         playerAnim.SetFloat("jump", jump);
-
-        if (jump > 0)
-        {
-            plRb.AddForce(new Vector2(0.0f, playerJumpForce), ForceMode2D.Force);
-        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            plRb.velocity = new Vector2(plRb.velocity.x, playerJumpForce);
 
     }
 
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("LvlComplete"))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
 }
