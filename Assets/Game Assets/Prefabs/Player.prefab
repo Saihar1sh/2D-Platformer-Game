@@ -116,9 +116,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 10
-  playerJumpForce: 10
+  playerJumpForce: 50
   StandingCol: {fileID: 4958696250217340445}
   CrouchCol: {fileID: 527657767946886437}
+  LvlCompleteCol: {fileID: 0}
 --- !u!50 &1717455084853504284
 Rigidbody2D:
   serializedVersion: 4
