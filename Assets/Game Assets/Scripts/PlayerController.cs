@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask whatIsGround;
 
     [SerializeField]
-    private BoxCollider2D StandingCol, CrouchCol, LvlCompleteCol;
+    private BoxCollider2D StandingCol, CrouchCol;
 
     private int amtOfJumpsLeft;
     private float speed;
@@ -51,8 +51,11 @@ public class PlayerController : MonoBehaviour
         speed = Input.GetAxisRaw("Horizontal");
         if (canMove)
         {
+            Vector3 position = transform.position;
+            position.x += speed * playerSpeed * Time.deltaTime;
+            transform.position = position;
             playerAnim.SetFloat("Speed", Mathf.Abs(speed));
-            plRb.velocity = new Vector2(speed * playerSpeed, plRb.velocity.y);
+           
         }
     }
 
@@ -112,12 +115,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("LvlComplete"))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-   
+    
     void OutOfBounds()
     {
         Debug.Log("Out of Bonds");
