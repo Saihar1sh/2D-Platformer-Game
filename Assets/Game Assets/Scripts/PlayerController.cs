@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     public int amtOfJumps;
-    public float playerSpeed, playerJumpForce, groundCheckRadius;
+    public float playerSpeed, playerJumpForce, groundCheckRadius , SecsToGameOverUI;
     public Transform boundryPosition, groundCheck;
     public LayerMask whatIsGround;
 
@@ -147,7 +148,21 @@ public class PlayerController : MonoBehaviour
     public void KillPlayer()
     {
         playerAnim.SetTrigger("Death");
+        StartCoroutine(SecsGapToGameOver(SecsToGameOverUI));
         canMove = false;
+    }
+    
+    private IEnumerator SecsGapToGameOver(float secs)
+    {
+        Debug.Log(secs + " Secs timer start");
+        yield return new WaitForSeconds(secs);
+        Debug.Log(secs + " Secs completed");
         ReloadLevel();
+
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("HiddenArea"))
+            collision.gameObject.SetActive(false);
     }
 }
