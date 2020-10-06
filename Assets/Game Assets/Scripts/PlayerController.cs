@@ -19,13 +19,16 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnim;
     private Rigidbody2D plRb;
 
-    public ScoreController scoreCont;
+    [SerializeField]
+    private ScoreController scorecontroller;
+    [SerializeField]
+    private GameOverController gameOver;
+
 
     private void Awake()
     {
         playerAnim = GetComponent<Animator>();
         plRb = GetComponent<Rigidbody2D>();
-      
     }
 
     private void Start()
@@ -123,7 +126,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Out of Bonds");
         Debug.Log("Player Died........Scene restarting");
-        ReloadLevel();
+        KillPlayer();
     }
     private void OnDrawGizmos()
     {
@@ -133,18 +136,13 @@ public class PlayerController : MonoBehaviour
     public void PickupKey()
     {
         Debug.Log("Picked up key");
-        scoreCont.IncreaseScore(10);
+        scorecontroller.IncreaseScore(10);
     }
 
     public void LoadAnyLevel(int sceneNo)
     {
         SceneManager.LoadScene(sceneNo);
     }
-    public void ReloadLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
     public void KillPlayer()
     {
         playerAnim.SetTrigger("Death");
@@ -157,8 +155,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log(secs + " Secs timer start");
         yield return new WaitForSeconds(secs);
         Debug.Log(secs + " Secs completed");
-        ReloadLevel();
-
+        gameOver.PlayerDied();
+        this.enabled = false;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
