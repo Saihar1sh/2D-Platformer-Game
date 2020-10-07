@@ -5,17 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public int amtOfJumps;
-    public float playerSpeed, playerJumpForce, groundCheckRadius , SecsToGameOverUI;
+    public int amtOfJumps, lives;
+    public float playerSpeed, playerJumpForce, groundCheckRadius , SecsToGameOverUI, knockBackSpeed;
     public Transform boundryPosition, groundCheck;
     public LayerMask whatIsGround;
 
     [SerializeField]
     private BoxCollider2D StandingCol, CrouchCol;
 
-    private int amtOfJumpsLeft;
+    private int amtOfJumpsLeft, livesleft;
     private float speed;
-    private bool IsCrouching = false, canMove = true,  isGrounded;
+    private bool IsCrouching = false, canMove = true,  isGrounded, outOfBoundry = false;
     private Animator playerAnim;
     private Rigidbody2D plRb;
 
@@ -23,6 +23,10 @@ public class PlayerController : MonoBehaviour
     private ScoreController scorecontroller;
     [SerializeField]
     private GameOverController gameOver;
+    [SerializeField]
+    private PlayerHeartsController heartsController;
+    [SerializeField]
+    private GameObject hearts;
 
 
     private void Awake()
@@ -34,6 +38,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         amtOfJumpsLeft = amtOfJumps;
+        livesleft = lives;
+
     }
     // Update is called once per frame
     void Update()
@@ -42,7 +48,11 @@ public class PlayerController : MonoBehaviour
         Crouch();
         if (plRb.position.y < boundryPosition.position.y)
         {
-            OutOfBounds();
+            if (outOfBoundry == false)
+            {
+                outOfBoundry = true;
+                OutOfBounds();
+            }
         }
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 
@@ -125,6 +135,7 @@ public class PlayerController : MonoBehaviour
     private void OutOfBounds()
     {
         Debug.Log("Out of Bonds");
+        canMove = false;
         Debug.Log("Player Died........Scene restarting");
         KillPlayer();
     }
@@ -143,6 +154,13 @@ public class PlayerController : MonoBehaviour
     {
         SceneManager.LoadScene(sceneNo);
     }
+    public void DecreaseLives()
+    {
+        livesleft--;
+        heartsController.heartlost(livesleft);
+        if (livesleft <= 0)
+            KillPlayer();
+    }
     public void KillPlayer()
     {
         playerAnim.SetTrigger("Death");
@@ -156,7 +174,9 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(secs);
         Debug.Log(secs + " Secs completed");
         gameOver.PlayerDied();
+        hearts.SetActive(false);
         this.enabled = false;
+        
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

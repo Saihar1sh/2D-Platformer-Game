@@ -11,21 +11,17 @@ public class GameOverController : MonoBehaviour
         btnRestart.onClick.AddListener(ReloadLevel);
         btnMenu.onClick.AddListener(LoadMenu);
     }
-    private void Start()
-    {
-        gameObject.SetActive(false);
-
-    }
     public void PlayerDied()
     {
         gameObject.SetActive(true);
+        Debug.Log("Gameover ");
     }
-    public void ReloadLevel()
+    private void ReloadLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void LoadMenu()
+    private void LoadMenu()
     {
         SceneManager.LoadScene(0);
     }
