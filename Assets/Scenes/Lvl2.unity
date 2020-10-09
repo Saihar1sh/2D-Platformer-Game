@@ -278,6 +278,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 858796730}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &842777808 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1489071162759140458, guid: 05dc19e969f51a84fb3166850e77e66f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1858511776}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6771eb473b4f8674e88933fc72cecf85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &858796730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1999,7 +2011,7 @@ PrefabInstance:
         type: 3}
       propertyPath: gameOver
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 842777808}
     - target: {fileID: 2993779245458824004, guid: 21b8af3d16e917d4299e89d928200a91,
         type: 3}
       propertyPath: scorecontroller
