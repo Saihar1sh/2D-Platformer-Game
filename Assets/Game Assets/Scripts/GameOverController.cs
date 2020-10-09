@@ -4,11 +4,12 @@ using UnityEngine.UI;
 
 public class GameOverController : MonoBehaviour
 {
-    public Button btnRestart;
+    public Button btnRestart, btnMenu;
 
     private void Awake()
     {
         btnRestart.onClick.AddListener(ReloadLevel);
+        btnMenu.onClick.AddListener(LoadMenu);
     }
     public void PlayerDied()
     {
@@ -20,4 +21,8 @@ public class GameOverController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    private void LoadMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
