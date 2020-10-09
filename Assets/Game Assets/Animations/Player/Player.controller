@@ -14,31 +14,31 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: jump
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: crouch
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isCrouching
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Death
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -593,22 +593,22 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102005938981910026}
-    m_Position: {x: 192, y: 192, z: 0}
+    m_Position: {x: 216, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102162254397842892}
-    m_Position: {x: 576, y: 192, z: 0}
+    m_Position: {x: 528, y: 168, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102035471152167456}
-    m_Position: {x: 204, y: -108, z: 0}
+    m_Position: {x: 240, y: -144, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102901642186363628}
-    m_Position: {x: 408, y: -12, z: 0}
+    m_Position: {x: 528, y: -144, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102846248849917982}
     m_Position: {x: 240, y: -72, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102829499374531140}
-    m_Position: {x: 648, y: 36, z: 0}
+    m_Position: {x: 672, y: 48, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 1101900993700758934}
@@ -617,8 +617,8 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 48, y: 60, z: 0}
-  m_EntryPosition: {x: 50, y: 120, z: 0}
-  m_ExitPosition: {x: 876, y: 108, z: 0}
+  m_AnyStatePosition: {x: -36, y: 60, z: 0}
+  m_EntryPosition: {x: -36, y: 144, z: 0}
+  m_ExitPosition: {x: 900, y: 132, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 1102005938981910026}
