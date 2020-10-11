@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public float playerSpeed, playerJumpForce;
+    public int amtOfJumps;
+    public float playerSpeed, playerJumpForce, groundCheckRadius;
+    public Transform boundryPosition, groundCheck;
+    public LayerMask whatIsGround;
 
     [SerializeField]
     private BoxCollider2D StandingCol, CrouchCol;
 
+    private int amtOfJumpsLeft;
     private float speed;
-    private bool IsCrouching = false, canMove = true;
+    private bool IsCrouching = false, canMove = true,  isGrounded;
     private Animator playerAnim;
     private Rigidbody2D plRb;
 
@@ -18,22 +23,39 @@ public class PlayerController : MonoBehaviour
         plRb = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        amtOfJumpsLeft = amtOfJumps;
+    }
     // Update is called once per frame
     void Update()
     {
-        PlayerMvt();
         PlayerDirection();
         Crouch();
+        if (plRb.position.y < boundryPosition.position.y)
+        {
+            OutOfBounds();
+        }
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+
+    }
+    private void FixedUpdate()
+    {
+        PlayerMvt();
         Jump();
+
     }
 
     private void PlayerMvt()
     {
+        speed = Input.GetAxisRaw("Horizontal");
         if (canMove)
         {
-            speed = Input.GetAxisRaw("Horizontal");
+            Vector3 position = transform.position;
+            position.x += speed * playerSpeed * Time.deltaTime;
+            transform.position = position;
             playerAnim.SetFloat("Speed", Mathf.Abs(speed));
-            plRb.velocity = new Vector2(speed * playerSpeed, plRb.velocity.y);
+           
         }
     }
 
@@ -77,11 +99,31 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        float jump = Input.GetAxis("Vertical");
-        playerAnim.SetFloat("jump", jump);
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-            plRb.velocity = new Vector2(plRb.velocity.x, playerJumpForce);
-
+        if (isGrounded)
+        {
+            amtOfJumpsLeft = amtOfJumps;
+        }
+        if (amtOfJumpsLeft > 0)
+        {
+            float jump = Input.GetAxis("Jump");
+            playerAnim.SetFloat("jump", jump);
+            if (jump > 0)
+            {
+                plRb.AddForce(new Vector2(0.0f, playerJumpForce), ForceMode2D.Force);
+                amtOfJumpsLeft--;
+            }
+        }
     }
 
+    
+    void OutOfBounds()
+    {
+        Debug.Log("Out of Bonds");
+        Debug.Log("Player Died........Scene restarting");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
 }
