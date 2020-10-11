@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour
         {
             canMove = false;
             Debug.Log("getkeyDown");
-            playerAnim.SetTrigger("crouching");
+            playerAnim.SetTrigger("crouch");
         }
 
         else if (Input.GetKey(KeyCode.LeftControl))
@@ -121,7 +122,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Out of Bonds");
         Debug.Log("Player Died........Scene restarting");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        ReloadLevel();
     }
     private void OnDrawGizmos()
     {
@@ -134,4 +135,19 @@ public class PlayerController : MonoBehaviour
         scoreCont.IncreaseScore(10);
     }
 
+    public void LoadAnyLevel(int sceneNo)
+    {
+        SceneManager.LoadScene(sceneNo);
+    }
+    public void ReloadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void KillPlayer()
+    {
+        playerAnim.SetTrigger("Death");
+        canMove = false;
+        ReloadLevel();
+    }
 }
