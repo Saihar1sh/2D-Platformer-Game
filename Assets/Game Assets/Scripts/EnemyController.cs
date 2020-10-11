@@ -14,6 +14,8 @@ public class EnemyController : MonoBehaviour
     private LayerMask whatIsGround;
     [SerializeField]
     private Transform groundCheck;
+    [SerializeField]
+    private PlayerHeartsController heartsController;
 
 
     private void Update()
@@ -58,7 +60,7 @@ public class EnemyController : MonoBehaviour
         if (collision.gameObject.GetComponent<PlayerController>() != null)
         {
             PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
-            pc.KillPlayer();
+            pc.DecreaseLives();
         }
     }
 }

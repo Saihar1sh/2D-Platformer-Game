@@ -1,35 +1,45 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public int amtOfJumps;
-    public float playerSpeed, playerJumpForce, groundCheckRadius;
+    public int amtOfJumps, lives;
+    public float playerSpeed, playerJumpForce, groundCheckRadius , SecsToGameOverUI, knockBackSpeed;
     public Transform boundryPosition, groundCheck;
     public LayerMask whatIsGround;
 
     [SerializeField]
     private BoxCollider2D StandingCol, CrouchCol;
 
-    private int amtOfJumpsLeft;
+    private int amtOfJumpsLeft, livesleft;
     private float speed;
-    private bool IsCrouching = false, canMove = true,  isGrounded;
+    private bool IsCrouching = false, canMove = true,  isGrounded, outOfBoundry = false;
     private Animator playerAnim;
     private Rigidbody2D plRb;
 
-    public ScoreController scoreCont;
+    [SerializeField]
+    private ScoreController scorecontroller;
+    [SerializeField]
+    private GameOverController gameOver;
+    [SerializeField]
+    private PlayerHeartsController heartsController;
+    [SerializeField]
+    private GameObject hearts;
+
 
     private void Awake()
     {
         playerAnim = GetComponent<Animator>();
         plRb = GetComponent<Rigidbody2D>();
-      
     }
 
     private void Start()
     {
         amtOfJumpsLeft = amtOfJumps;
+        livesleft = lives;
+
     }
     // Update is called once per frame
     void Update()
@@ -38,7 +48,11 @@ public class PlayerController : MonoBehaviour
         Crouch();
         if (plRb.position.y < boundryPosition.position.y)
         {
-            OutOfBounds();
+            if (outOfBoundry == false)
+            {
+                outOfBoundry = true;
+                OutOfBounds();
+            }
         }
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 
@@ -121,8 +135,9 @@ public class PlayerController : MonoBehaviour
     private void OutOfBounds()
     {
         Debug.Log("Out of Bonds");
+        canMove = false;
         Debug.Log("Player Died........Scene restarting");
-        ReloadLevel();
+        KillPlayer();
     }
     private void OnDrawGizmos()
     {
@@ -132,22 +147,40 @@ public class PlayerController : MonoBehaviour
     public void PickupKey()
     {
         Debug.Log("Picked up key");
-        scoreCont.IncreaseScore(10);
+        scorecontroller.IncreaseScore(10);
     }
 
     public void LoadAnyLevel(int sceneNo)
     {
         SceneManager.LoadScene(sceneNo);
     }
-    public void ReloadLevel()
+    public void DecreaseLives()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        livesleft--;
+        heartsController.heartlost(livesleft);
+        if (livesleft <= 0)
+            KillPlayer();
     }
-
     public void KillPlayer()
     {
         playerAnim.SetTrigger("Death");
+        StartCoroutine(SecsGapToGameOver(SecsToGameOverUI));
         canMove = false;
-        ReloadLevel();
+    }
+    
+    private IEnumerator SecsGapToGameOver(float secs)
+    {
+        Debug.Log(secs + " Secs timer start");
+        yield return new WaitForSeconds(secs);
+        Debug.Log(secs + " Secs completed");
+        gameOver.PlayerDied();
+        hearts.SetActive(false);
+        this.enabled = false;
+        
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("HiddenArea"))
+            collision.gameObject.SetActive(false);
     }
 }
