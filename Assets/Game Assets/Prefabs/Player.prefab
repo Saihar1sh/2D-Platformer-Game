@@ -157,7 +157,7 @@ MonoBehaviour:
     m_Bits: 256
   StandingCol: {fileID: 1018548165861103699}
   CrouchCol: {fileID: 1798422411972605775}
-  LvlCompleteCol: {fileID: 0}
+  scoreCont: {fileID: 0}
 --- !u!50 &1717455084853504284
 Rigidbody2D:
   serializedVersion: 4

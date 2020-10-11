@@ -17,10 +17,13 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnim;
     private Rigidbody2D plRb;
 
+    public ScoreController scoreCont;
+
     private void Awake()
     {
         playerAnim = GetComponent<Animator>();
         plRb = GetComponent<Rigidbody2D>();
+      
     }
 
     private void Start()
@@ -114,9 +117,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    
-    void OutOfBounds()
+    private void OutOfBounds()
     {
         Debug.Log("Out of Bonds");
         Debug.Log("Player Died........Scene restarting");
@@ -126,4 +127,11 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
+
+    public void PickupKey()
+    {
+        Debug.Log("Picked up key");
+        scoreCont.IncreaseScore(10);
+    }
+
 }
