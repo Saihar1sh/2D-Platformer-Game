@@ -9,6 +9,8 @@ public class StartMenuController : MonoBehaviour
     [SerializeField]
     private GameObject MainMenu, LevelSelect, PlayMenu;
 
+    private LevelManager manager;
+
     private void Awake()
     {
         btnPlay.onClick.AddListener(Play);

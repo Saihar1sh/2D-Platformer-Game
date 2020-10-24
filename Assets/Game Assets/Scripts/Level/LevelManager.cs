@@ -6,6 +6,10 @@ public class LevelManager : MonoBehaviour
     public string MainMenu;
     public string[] Levels;
 
+    public Vector2 lastCheckptPos;
+
+    private PlayerController playerScript;
+
     private static LevelManager instance;
     public static LevelManager Instance { get { return instance; } }
    private void Awake()
@@ -22,7 +26,8 @@ public class LevelManager : MonoBehaviour
     }
     private void Start()
     {
-        SetLevelStatus(MainMenu, LevelStatus.Unlocked);
+        //ResetLevelStatus();
+          SetLevelStatus(MainMenu, LevelStatus.Unlocked);
         if (GetLevelStatus(Levels[0]) == LevelStatus.Locked)
             SetLevelStatus(Levels[0], LevelStatus.Unlocked);
     }
@@ -36,6 +41,14 @@ public class LevelManager : MonoBehaviour
         if (nextSceneIndex < Levels.Length)
             SetLevelStatus(Levels[nextSceneIndex], LevelStatus.Unlocked);
     }
+    public void ResetLevelStatus()
+    {
+        //for reseting levels lock state
+        SetLevelStatus("Lvl1", LevelStatus.Unlocked);
+        for (int i = 1; i < 4; i++)
+            SetLevelStatus(Levels[i], LevelStatus.Locked);
+        Debug.Log("Levels has been reset");
+    }
     public LevelStatus GetLevelStatus(string level)
     {
         LevelStatus levelStatus = (LevelStatus) PlayerPrefs.GetInt(level,0);
@@ -44,5 +57,12 @@ public class LevelManager : MonoBehaviour
     public void SetLevelStatus(string level, LevelStatus levelStatus)
     {
         PlayerPrefs.SetInt(level, (int)levelStatus);
+    }
+    
+    public void PlayerLastCheckpt(Vector2 checkPoint)
+    {
+        lastCheckptPos = checkPoint;
+        Debug.Log("Last checkpt set");
+
     }
 }

@@ -22,9 +22,12 @@ public class PlayerHeartsController : MonoBehaviour
                 heartImage1.enabled = false;
                 break;
             case 1:
+                heartImage1.enabled = false;
                 heartImage2.enabled = false;
                 break;
             case 0:
+                heartImage1.enabled = false;
+                heartImage2.enabled = false;
                 heartImage3.enabled = false;
                 break;
         }

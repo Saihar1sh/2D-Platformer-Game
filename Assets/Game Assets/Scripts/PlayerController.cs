@@ -6,18 +6,17 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public int amtOfJumps, lives;
-    public float playerSpeed, playerJumpForce, groundCheckRadius , SecsToGameOverUI, knockBackSpeed;
+    public float playerSpeed, playerJumpForce, groundCheckRadius , SecsToGameOverUI;
     public Transform boundryPosition, groundCheck;
     public LayerMask whatIsGround;
 
     [SerializeField]
-    private BoxCollider2D StandingCol, CrouchCol;
-
-    private int amtOfJumpsLeft, livesleft;
-    private float speed;
-    private bool IsCrouching = false, canMove = true,  isGrounded, outOfBoundry = false;
+    private int amtOfJumpsLeft, livesleft,a;
+    private float speed, jump;
+    private bool IsCrouching = false, canMove = true, canJump =true, isGrounded, outOfBoundry = false;
     private Animator playerAnim;
     private Rigidbody2D plRb;
+    private CapsuleCollider2D capsuleCollider2D;
 
     [SerializeField]
     private ScoreController scorecontroller;
@@ -27,24 +26,30 @@ public class PlayerController : MonoBehaviour
     private PlayerHeartsController heartsController;
     [SerializeField]
     private GameObject hearts;
+    [SerializeField]
+    private PauseMenu pauseMenu;
 
 
     private void Awake()
     {
         playerAnim = GetComponent<Animator>();
         plRb = GetComponent<Rigidbody2D>();
+        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
     }
 
     private void Start()
     {
+        Time.timeScale = 1f;
         amtOfJumpsLeft = amtOfJumps;
         livesleft = lives;
+        //transform.position = LevelManager.Instance.lastCheckptPos;
+        //Debug.Log("Player last checkpt set");
 
     }
     // Update is called once per frame
     void Update()
     {
-        PlayerDirection();
+        UpdatePlayerAnimations();
         Crouch();
         if (plRb.position.y < boundryPosition.position.y)
         {
@@ -54,27 +59,45 @@ public class PlayerController : MonoBehaviour
                 OutOfBounds();
             }
         }
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            pauseMenu.MenuEnable();
+        }
 
     }
     private void FixedUpdate()
     {
-        PlayerMvt();
+        PlayerInput();
+        PlayerDirection();
         Jump();
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 
     }
 
-    private void PlayerMvt()
+    private void PlayerInput()
     {
         speed = Input.GetAxisRaw("Horizontal");
+        jump = Input.GetAxis("Jump");
         if (canMove)
         {
+            PlayerMvt();
+        }
+
+    }
+    private void UpdatePlayerAnimations()
+    {
+        playerAnim.SetFloat("Speed", Mathf.Abs(speed));
+        playerAnim.SetFloat("VerticalSpeed", plRb.velocity.y);
+        playerAnim.SetFloat("jump", jump);
+        playerAnim.SetBool("isCrouching", IsCrouching);
+
+    }
+    private void PlayerMvt()
+    {       
             Vector3 position = transform.position;
             position.x += speed * playerSpeed * Time.deltaTime;
             transform.position = position;
-            playerAnim.SetFloat("Speed", Mathf.Abs(speed));
-           
-        }
+          
     }
 
     private void PlayerDirection()
@@ -85,6 +108,7 @@ public class PlayerController : MonoBehaviour
         else if (speed > 0)
             scale.x = Mathf.Abs(scale.x);
         transform.localScale = scale;
+        
     }
 
     private void Crouch()
@@ -109,22 +133,17 @@ public class PlayerController : MonoBehaviour
             canMove = true;
             Debug.Log("getkeyup");
         }
-        StandingCol.enabled = !IsCrouching;
-        CrouchCol.enabled = IsCrouching;
 
-        playerAnim.SetBool("isCrouching", IsCrouching);
 
     }
     private void Jump()
     {
-        if (isGrounded)
+        if (isGrounded && canJump)
         {
             amtOfJumpsLeft = amtOfJumps;
         }
         if (amtOfJumpsLeft > 0)
         {
-            float jump = Input.GetAxis("Jump");
-            playerAnim.SetFloat("jump", jump);
             if (jump > 0)
             {
                 plRb.AddForce(new Vector2(0.0f, playerJumpForce), ForceMode2D.Force);
@@ -149,7 +168,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Picked up key");
         scorecontroller.IncreaseScore(10);
     }
-
+    public void TelportTo(Vector2 teleportPosition)
+    {
+        transform.position = teleportPosition;
+    }
     public void LoadAnyLevel(int sceneNo)
     {
         SceneManager.LoadScene(sceneNo);
@@ -157,15 +179,21 @@ public class PlayerController : MonoBehaviour
     public void DecreaseLives()
     {
         livesleft--;
-        heartsController.heartlost(livesleft);
-        if (livesleft <= 0)
+        if (livesleft > 0)
+        {
+            playerAnim.SetTrigger("Hurt");
+            heartsController.heartlost(livesleft);
+        }
+        else if (livesleft <= 0)
             KillPlayer();
     }
     public void KillPlayer()
     {
+        canMove = false;
+        canJump = false;
+        heartsController.heartlost(0);
         playerAnim.SetTrigger("Death");
         StartCoroutine(SecsGapToGameOver(SecsToGameOverUI));
-        canMove = false;
     }
     
     private IEnumerator SecsGapToGameOver(float secs)

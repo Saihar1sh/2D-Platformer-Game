@@ -41,9 +41,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackGround
+    uniqueID: 1634891807
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Platform
     uniqueID: 4035047633
+    locked: 0
+  - name: Enemies
+    uniqueID: 2746290893
+    locked: 0
+  - name: Player
+    uniqueID: 2743740841
     locked: 0
