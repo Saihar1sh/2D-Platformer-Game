@@ -15,10 +15,12 @@ public class Checkpoint : MonoBehaviour
     {
         if(collision.gameObject.GetComponent<PlayerController>() != null)
         {
-            previousCheckpoint = collision.gameObject.transform.position;
+            SoundManager.Instance.Play(Sounds.checkPoint);
+            GameObject player = collision.gameObject;
+            previousCheckpoint = player.transform.position;
             checkpointOn.SetActive(true);
             LevelManager.Instance.PlayerLastCheckpt(previousCheckpoint);
-
+            //player.GetComponent<PlayerController>().SaveGame();
         }
 
     }

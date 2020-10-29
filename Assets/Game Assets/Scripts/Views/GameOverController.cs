@@ -17,6 +17,7 @@ public class GameOverController : MonoBehaviour
     }
     private void ReloadLevel()
     {
+        SoundManager.Instance.Play(Sounds.buttonClick);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4890310156068154821}
   m_Layer: 0
   m_Name: Teleport Portal
-  m_TagString: LvlComplete
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,4 +139,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b237b78c93d1cb4d81a725745ba79d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextTeleportLocation: {x: 0, y: 0, z: 0}
+  nextTeleportLocation: {x: 0, y: 0}

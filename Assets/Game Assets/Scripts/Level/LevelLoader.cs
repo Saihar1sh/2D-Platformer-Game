@@ -21,12 +21,15 @@ public class LevelLoader : MonoBehaviour
         switch (levelStatus)
         {
             case LevelStatus.Locked:
+                SoundManager.Instance.Play(Sounds.buttonInvalid);
                 Debug.Log("Can't play this yet. You have to complete it first.");
                 break;
             case LevelStatus.Unlocked:
+                SoundManager.Instance.Play(Sounds.buttonStart);
                 SceneManager.LoadScene(LevelName);
                 break;
             case LevelStatus.Completed:
+                SoundManager.Instance.Play(Sounds.buttonStart);
                 SceneManager.LoadScene(LevelName);
                 break;
 

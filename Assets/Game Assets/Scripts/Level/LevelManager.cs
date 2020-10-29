@@ -65,4 +65,18 @@ public class LevelManager : MonoBehaviour
         Debug.Log("Last checkpt set");
 
     }
+    //public void LoadSaveGame()
+    //{
+    //    if (FindObjectOfType<PlayerController>() != null)
+    //    {
+    //        PlayerData playerData = SaveSystem.LoadGame();
+    //        SceneManager.LoadScene(playerData.level);
+    //        playerScript.LoadGame();
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Player controller is not found");
+            
+    //    }            
+    //}
 }

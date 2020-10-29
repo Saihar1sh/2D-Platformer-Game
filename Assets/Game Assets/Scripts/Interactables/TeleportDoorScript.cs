@@ -10,6 +10,7 @@ public class TeleportDoorScript : MonoBehaviour
     {
         if(collision.gameObject.GetComponent<PlayerController>() != null)
         {
+            SoundManager.Instance.Play(Sounds.teleportUse);
             collision.gameObject.GetComponent<PlayerController>().TelportTo(nextTeleportLocation);
         }
     }

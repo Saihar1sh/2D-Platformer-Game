@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public int amtOfJumps, lives;
+    public int amtOfJumps, lives, currentLevelIndex;
     public float playerSpeed, playerJumpForce, groundCheckRadius , SecsToGameOverUI;
     public Transform boundryPosition, groundCheck;
     public LayerMask whatIsGround;
@@ -13,7 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private int amtOfJumpsLeft, livesleft,a;
     private float speed, jump;
-    private bool IsCrouching = false, canMove = true, canJump =true, isGrounded, outOfBoundry = false;
+    private bool IsCrouching = false, canMove = true, canJump =true, isGrounded, outOfBoundry = false, canInput = true;
     private Animator playerAnim;
     private Rigidbody2D plRb;
     private CapsuleCollider2D capsuleCollider2D;
@@ -42,15 +41,14 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f;
         amtOfJumpsLeft = amtOfJumps;
         livesleft = lives;
-        //transform.position = LevelManager.Instance.lastCheckptPos;
-        //Debug.Log("Player last checkpt set");
-
+        transform.position = LevelManager.Instance.lastCheckptPos;
+        Debug.Log("Player last checkpt set");
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
     }
     // Update is called once per frame
     void Update()
     {
         UpdatePlayerAnimations();
-        Crouch();
         if (plRb.position.y < boundryPosition.position.y)
         {
             if (outOfBoundry == false)
@@ -76,13 +74,16 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerInput()
     {
-        speed = Input.GetAxisRaw("Horizontal");
-        jump = Input.GetAxis("Jump");
-        if (canMove)
+        if (canInput)
         {
-            PlayerMvt();
+            speed = Input.GetAxisRaw("Horizontal");
+            jump = Input.GetAxis("Jump");
+            if (canMove)
+            {
+                PlayerMvt();
+            }
+            Crouch();
         }
-
     }
     private void UpdatePlayerAnimations()
     {
@@ -93,12 +94,13 @@ public class PlayerController : MonoBehaviour
 
     }
     private void PlayerMvt()
-    {       
-            Vector3 position = transform.position;
-            position.x += speed * playerSpeed * Time.deltaTime;
-            transform.position = position;
-          
+    {
+        Vector3 position = transform.position;
+        position.x += speed * playerSpeed * Time.deltaTime;
+        transform.position = position;
+         
     }
+    
 
     private void PlayerDirection()
     {
@@ -165,6 +167,7 @@ public class PlayerController : MonoBehaviour
 
     public void PickupKey()
     {
+        SoundManager.Instance.Play(Sounds.pickup);
         Debug.Log("Picked up key");
         scorecontroller.IncreaseScore(10);
     }
@@ -176,12 +179,16 @@ public class PlayerController : MonoBehaviour
     {
         SceneManager.LoadScene(sceneNo);
     }
+    public int getLivesInfo()
+    {
+        return livesleft;
+    }
     public void DecreaseLives()
     {
         livesleft--;
         if (livesleft > 0)
         {
-            playerAnim.SetTrigger("Hurt");
+            SoundManager.Instance.Play(Sounds.playerHurt);
             heartsController.heartlost(livesleft);
         }
         else if (livesleft <= 0)
@@ -189,9 +196,9 @@ public class PlayerController : MonoBehaviour
     }
     public void KillPlayer()
     {
-        canMove = false;
-        canJump = false;
+        canInput = false;
         heartsController.heartlost(0);
+        SoundManager.Instance.Play(Sounds.playerDeath);
         playerAnim.SetTrigger("Death");
         StartCoroutine(SecsGapToGameOver(SecsToGameOverUI));
     }
@@ -209,6 +216,27 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("HiddenArea"))
+        {
+            SoundManager.Instance.Play(Sounds.hiddenArea);
             collision.gameObject.SetActive(false);
+        }
     }
+
+    //public void SaveGame()
+    //{
+    //    SaveSystem.SaveGame(this);
+    //    Debug.Log("Game data Saved");
+    //}
+    //public void LoadGame()
+    //{
+    //    PlayerData data =  SaveSystem.LoadGame();
+    //   // LoadAnyLevel(data.level);
+    //    livesleft = data.lives;
+    //    Vector3 position;
+    //    position.x = data.pos[0];
+    //    position.y = data.pos[1];
+    //    position.z = data.pos[2];
+
+    //    Debug.Log("Loaded Saved game");
+    //}
 }

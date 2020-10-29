@@ -5,58 +5,42 @@ using UnityEngine.UI;
 public class StartMenuController : MonoBehaviour
 {
     [SerializeField]
-    private Button btnPlay, btnQuit, btnLevelSelect, btnCloseLevelMenu, btnContinue, btnNewGame, btnReturnToMenu;
+    private Button btnQuit, btnLevelSelect, btnCloseLevelMenu, btnContinue;
     [SerializeField]
-    private GameObject MainMenu, LevelSelect, PlayMenu;
-
-    private LevelManager manager;
+    private GameObject MainMenu, LevelSelect;
 
     private void Awake()
     {
-        btnPlay.onClick.AddListener(Play);
         btnQuit.onClick.AddListener(Quit);
         btnLevelSelect.onClick.AddListener(LevelSelectMenu);
-        btnReturnToMenu.onClick.AddListener(ReturnToMainMenu);
         btnCloseLevelMenu.onClick.AddListener(CloseLevelMenu);
         btnContinue.onClick.AddListener(ContinueGame);
-        btnNewGame.onClick.AddListener(NewGame);
     }
     private void Start()
     {
         LevelSelect.SetActive(false);
-        PlayMenu.SetActive(false);
-        MainMenu.SetActive(true);
-    }
-    private void Play()
-    {
-        MainMenu.SetActive(false);
-        PlayMenu.SetActive(true);
-    }
-    private void ReturnToMainMenu()
-    {
-        PlayMenu.SetActive(false);
         MainMenu.SetActive(true);
     }
     private void ContinueGame()
     {
         //going to use playerprefs and checkpoints
-    }
-    private void NewGame()
-    {
-        SceneManager.LoadScene(1);
+        //LevelManager.Instance.LoadSaveGame();
     }
     private void LevelSelectMenu()
     {
+        SoundManager.Instance.Play(Sounds.buttonClick);
         MainMenu.SetActive(false);
         LevelSelect.SetActive(true);
     }
     private void CloseLevelMenu()
     {
+        SoundManager.Instance.Play(Sounds.buttonBack);
         LevelSelect.SetActive(false);
         MainMenu.SetActive(true);
     }
     private void Quit()
     {
+        SoundManager.Instance.Play(Sounds.buttonBack);
         Debug.Log("Application is quitting.....");
         Application.Quit();
     }
